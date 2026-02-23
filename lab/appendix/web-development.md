@@ -14,14 +14,10 @@
 - [REST API](#rest-api)
 - [API](#api)
   - [`<api-token>`](#api-token)
-- [`Swagger UI`](#swagger-ui)
-  - [Open `Swagger UI`](#open-swagger-ui)
-  - [Authorize in `Swagger UI`](#authorize-in-swagger-ui)
-  - [Try an endpoint in `Swagger UI`](#try-an-endpoint-in-swagger-ui)
 - [Endpoint](#endpoint)
-- [Send a `GET` query](#send-a-get-query)
-  - [Send a `GET` query using a browser](#send-a-get-query-using-a-browser)
-  - [Send a `GET` query using curl](#send-a-get-query-using-curl)
+- [Send a `GET` request](#send-a-get-request)
+  - [Send a `GET` request using a browser](#send-a-get-request-using-a-browser)
+  - [Send a `GET` request using `curl`](#send-a-get-request-using-curl)
 - [Pretty-print the `JSON` response](#pretty-print-the-json-response)
   - [Pretty-print the `JSON` response using `jq`](#pretty-print-the-json-response-using-jq)
   - [Pretty-print the `JSON` response using a browser](#pretty-print-the-json-response-using-a-browser)
@@ -49,7 +45,7 @@ A web server is software that delivers content or services to [web clients](#web
 
 A web client is software that requests content from a [web server](#web-server) and displays the received content.
 
-Web clients include browsers (`Chrome`, `Firefox`) and command-line tools ([`curl`](#send-a-get-query-using-curl)).
+Web clients include browsers (`Chrome`, `Firefox`) and command-line tools ([`curl`](#send-a-get-request-using-curl)).
 
 ## Protocol
 
@@ -123,46 +119,9 @@ Docs:
 
 The value that you use to authenticate in the API.
 
-## `Swagger UI`
-
-`Swagger UI` is an interactive web page that lets you explore and test a REST API.
-
-`FastAPI` auto-generates `Swagger UI` at the `/docs` path.
-
-Actions:
-
-- [Open `Swagger UI`](#open-swagger-ui)
-- [Authorize in `Swagger UI`](#authorize-in-swagger-ui)
-- [Try an endpoint in `Swagger UI`](#try-an-endpoint-in-swagger-ui)
-
-### Open `Swagger UI`
-
-1. Open <http://127.0.0.1:42001/docs> in a browser.
-
-### Authorize in `Swagger UI`
-
-If the API requires authentication:
-
-1. [Open `Swagger UI`](#open-swagger-ui).
-2. Click the `Authorize` button (lock icon at the top right).
-3. In the `Value` field, enter the [`<api-token>`](#api-token).
-4. Click `Authorize`.
-5. Click `Close`.
-
-All subsequent requests will include the API key in the `Authorization` header.
-
-### Try an endpoint in `Swagger UI`
-
-1. [Open `Swagger UI`](#open-swagger-ui).
-2. Click on an endpoint (e.g., `GET /items`).
-3. Click `Try it out`.
-4. Fill in parameters if needed.
-5. Click `Execute`.
-6. See the response below: status code, response body, headers.
-
 ## Endpoint
 
-An endpoint is a specific API entry point identified by:
+An endpoint is a specific [API](#api) entry point identified by:
 
 - HTTP method (`GET`, `POST`, `PUT`, `DELETE`, ...).
 - Path (`/status`, `/items`, ...).
@@ -172,44 +131,30 @@ Example:
 - `GET /status` is one endpoint.
 - `POST /status` is a different endpoint.
 
-Quick check with `curl`:
+## Send a `GET` request
 
-```terminal
-curl http://127.0.0.1:42000/status
-```
+### Send a `GET` request using a browser
 
-## Send a `GET` query
+1. Open the URL in a browser.
 
-### Send a `GET` query using a browser
+   The browser will send the `GET` query by default.
 
-1. Open the link in a browser: <http://127.0.0.1:42000/status>.
+### Send a `GET` request using `curl`
 
-> [!TIP]
-> [`FastAPI`](https://fastapi.tiangolo.com/) auto-generates interactive API documentation.
-> Open <http://127.0.0.1:42000/docs> to explore all available endpoints.
-
-### Send a `GET` query using curl
-
-1. [Run using the `VS Code Terminal`](./vs-code.md#run-a-command-using-the-vs-code-terminal):
-
-   ```terminal
-   curl http://127.0.0.1:42000/status
-   ```
-
-2. You should see the response from the web server in the terminal.
+See [`curl`](./useful-programs.md#send-a-get-request-with-curl).
 
 ## Pretty-print the `JSON` response
 
 ### Pretty-print the `JSON` response using `jq`
 
-1. [Install `jq`](./linux.md#install-jq) if not installed.
+1. [Install `jq`](./useful-programs.md#jq) if not installed.
 2. [Run using the `VS Code Terminal`](./vs-code.md#run-a-command-using-the-vs-code-terminal):
 
    ```terminal
    <command-that-produces-json-response> | jq .
    ```
 
-   [Pipe the output](./linux.md#pipe) to `jq`.
+   [Pipe the output](./bash.md#pipe-the-stdout) to `jq`.
 
 Example:
 

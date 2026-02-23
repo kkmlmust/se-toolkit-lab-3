@@ -21,7 +21,7 @@ Your job is to enable the endpoint, discover the bugs, and fix them.
   - [1.2. Create a `Lab Task` issue](#12-create-a-lab-task-issue)
   - [1.3. Restart the services](#13-restart-the-services)
   - [1.4. Examine the database using `pgAdmin`](#14-examine-the-database-using-pgadmin)
-  - [1.5. Enable the interactions endpoint](#15-enable-the-interactions-endpoint)
+  - [1.5. Enable the `/interactions` endpoint](#15-enable-the-interactions-endpoint)
   - [1.6. Restart the services](#16-restart-the-services)
   - [1.7. Try `GET /interactions`](#17-try-get-interactions)
   - [1.8. Read the error](#18-read-the-error)
@@ -49,7 +49,7 @@ Title: `[Task] Enable and debug the interactions endpoint`
 
 ### 1.3. Restart the services
 
-1. [Stop the running services](../setup.md#114-new-stop-the-services).
+1. [Stop the running services](../setup.md#115-new-stop-the-services).
 2. [Run using the `VS Code Terminal`](../../appendix/vs-code.md#run-a-command-using-the-vs-code-terminal):
 
    ```terminal
@@ -61,14 +61,14 @@ Title: `[Task] Enable and debug the interactions endpoint`
 
 ### 1.4. Examine the database using `pgAdmin`
 
-1. Make sure you have [set up `pgAdmin`](../setup.md#1132-new-set-up-pgadmin).
+1. Make sure you have [set up `pgAdmin`](../setup.md#1142-new-set-up-pgadmin).
 2. [Inspect columns](../../appendix/pgadmin.md#inspect-columns) of the `interaction_logs` table.
 3. Note the column names: `id`, `learner_id`, `item_id`, `kind`, `created_at`.
 
 > [!NOTE]
 > Pay attention to the column name `created_at`. You will need it later.
 
-### 1.5. Enable the interactions endpoint
+### 1.5. Enable the `/interactions` endpoint
 
 1. [Open the file](../../appendix/vs-code.md#open-the-file):
    `.env.docker.secret`.
@@ -111,7 +111,7 @@ Title: `[Task] Enable and debug the interactions endpoint`
 ### 1.7. Try `GET /interactions`
 
 1. Open in a browser: <http://127.0.0.1:42001/docs>.
-2. [Authorize](./task-1.md#6-authorize-in-swagger-ui) with the API key.
+2. [Authorize](./task-1.md#143-authorize-in-swagger-ui) with the API key.
 3. Expand the `GET /interactions` endpoint.
 4. Click `Try it out`.
 5. Click `Execute`.
@@ -126,22 +126,27 @@ Title: `[Task] Enable and debug the interactions endpoint`
 ### 1.9. Trace the bug
 
 1. [Open the file](../../appendix/vs-code.md#open-the-file):
-   [`src/app/models/interaction.py`](../../../src/app/models/interaction.py).
-2. Look at the `InteractionModel` class (the response schema):
+   [`src/app/routers/interactions.py`](../../../src/app/routers/interactions.py).
+2. Look at the endpoint definition:
 
    ```python
-   class InteractionModel(SQLModel):
-       id: int
-       learner_id: int
-       item_id: int
-       kind: str
-       timestamp: datetime
+   @router.get("/", response_model=list[InteractionModel])
+   async def get_interactions(...)
    ```
 
-3. The response schema has a field called `timestamp`.
-4. Recall from [Step 2](#14-examine-the-database-using-pgadmin): the database table `interaction_logs` has a column called `created_at`, not `timestamp`.
-5. The `InteractionLog` class (the database model) has `created_at`, but the `InteractionModel` class (the response schema) has `timestamp`.
-6. This mismatch causes the error.
+   **Note:** The path `"/"` is local to this router file.
+
+   `FastAPI` combines it with the `prefix="/interactions"` set in [`src/app/main.py`](../../../src/app/main.py) to produce the full path `/interactions`.
+
+   The `response_model` parameter tells `FastAPI` which schema to use when serializing the response. It is `InteractionModel`.
+3. [Open the file](../../appendix/vs-code.md#open-the-file):
+   [`src/app/models/interaction.py`](../../../src/app/models/interaction.py).
+4. Look at the `InteractionModel` class (the response schema).
+5. The response schema has a field called `timestamp`.
+6. [Recall](#14-examine-the-database-using-pgadmin) that
+   the database table `interaction_logs` has a column called `created_at`, not `timestamp`.
+7. The `InteractionLog` class (the database model) has `created_at`, but the `InteractionModel` class (the response schema) has `timestamp`.
+8. This mismatch causes the error.
 
 ### 1.10. Fix Bug 1: rename `timestamp` to `created_at`
 
@@ -169,8 +174,8 @@ The field name in the response schema (`InteractionModel`) must match the field 
 
 ### 1.11. Verify `GET /interactions` works
 
-1. Restart the services ([Step 4](#13-restart-the-services)).
-2. Open `Swagger UI` and [authorize](./task-1.md#6-authorize-in-swagger-ui).
+1. [Restart the services](#16-restart-the-services).
+2. Open `Swagger UI` and [authorize](./task-1.md#143-authorize-in-swagger-ui).
 3. Try `GET /interactions`.
 4. Observe: you should see a `200` status code with interaction data.
 
@@ -240,7 +245,7 @@ The query parameter is called `item_id`, so the filter should compare `i.item_id
    ```
 
 2. Save the file.
-3. Restart the services ([Step 4](#13-restart-the-services)).
+3. [Restart the services](#16-restart-the-services).
 4. Verify in `Swagger UI` that `GET /interactions?item_id=2` now returns the correct results matching the database query.
 
 ### 1.17. Commit Bug 2 fix

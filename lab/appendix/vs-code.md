@@ -43,7 +43,6 @@
 - [Keyboard shortcuts](#keyboard-shortcuts)
   - [Frequently used shortcuts](#frequently-used-shortcuts)
     - [Shortcut: `Go back`](#shortcut-go-back)
-      - [Set shortcut for Go back](#set-shortcut-for-go-back)
     - [Shortcut: Switch to the previous editor](#shortcut-switch-to-the-previous-editor)
     - [Shortcut: Search in the current editor](#shortcut-search-in-the-current-editor)
     - [Shortcut: Search in all files](#shortcut-search-in-all-files)
@@ -54,6 +53,7 @@
 - [Common actions](#common-actions)
   - [(`Windows` only) Open the directory in `WSL`](#windows-only-open-the-directory-in-wsl)
   - [Open the file](#open-the-file)
+    - [Open the file using `code`](#open-the-file-using-code)
   - [Open the `Markdown` preview](#open-the-markdown-preview)
 - [Language server](#language-server)
   - [Type on hover](#type-on-hover)
@@ -495,12 +495,10 @@ Docs:
 
 `Ctrl+Alt+-` (`Ctrl+-` on `macOS`)
 
-##### Set shortcut for Go back
+You can [set another shortcut](#set-a-shortcut):
 
-1. [Set a shortcut](#set-a-shortcut)
-    - `<command-name>` is `Go Back`
-
-    <img alt="Status Bar (left)" src="../images/appendix/vs-code/command-palette-go-back.png" style="width:400px"></img>
+- `<command-name>` is `Go Back`;
+- Get the `Alt+-` shortcut by typing `Alt`, then `-`.
 
 #### Shortcut: Switch to the previous editor
 
@@ -568,11 +566,12 @@ Here are some [workspace settings](#workspace-settings) that you can change:
 
 ### Open the file
 
-Method 1: [Open the local file using the `Explorer`](#open-the-local-file-using-the-explorer)
+<!-- no toc -->
+- Method 1: [Open the local file using `Explorer`](#open-the-local-file-using-the-explorer)
+- Method 2: [Open the file using `Quick Open`](#open-the-file-using-quick-open)
+- Method 3: [Open the file using `code`](#open-the-file-using-code)
 
-Method 2: [Open the file using `Quick Open`](#open-the-file-using-quick-open)
-
-Method 3: Open the file using `VS Code`:
+#### Open the file using `code`
 
 1. [Open a new `VS Code Terminal`](#open-a-new-vs-code-terminal) if something is running in your current `VS Code Terminal`.
 2. [Run using the `VS Code Terminal`](#run-a-command-using-the-vs-code-terminal):
@@ -580,7 +579,7 @@ Method 3: Open the file using `VS Code`:
   ```terminal
   code <file-path>
   ```
-  
+
   See [`<file-path>`](./file-system.md#file-path).
 
 ### Open the `Markdown` preview
